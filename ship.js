@@ -12,7 +12,7 @@ const ship = (length, status, boardLocation) => {
     }
 }
 
-const hit = (targ) => {
+const hit = (y, x) => {
     // this needs the gameboard
     
     //isSunk function inside to check when BS is sunk.
@@ -21,10 +21,20 @@ const hit = (targ) => {
 
 const gameBoard = (nums, letters) => {
     // A-G, 1-8
-    // build obj with x(numbers) and y (letters) axis
-    let gameBoardObj = {
-        x:  nums,
-        y: letters    
+    let gameBoardObj = {};
+    let boardArr = [];
+    for (let i=0; i <= nums.length; i++) {
+        for ( let j = 0; j <= letters.length; j++ ) {
+            let letNum = letters[i]+nums[j];
+            boardArr.push(letNum);
+        }    
+    };
+
+    for (let k=0; k < letters.length * nums.length; k++) {  
+        gameBoardObj[boardArr[k]] = {
+            controlled: "no",
+            type: "open"    
+        };
     };
 
     return gameBoardObj;
