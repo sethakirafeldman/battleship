@@ -6,6 +6,14 @@
 const gameBoardObj = {};
 const ships = [];
 
+const gamePieces = {
+    carrier: 5,
+    battleship: 4,
+    cruiser: 3,
+    submarine: 3,
+    destroyer: 2
+};
+
 const xAx = [1,2,3,4,5,6,7,8];
 const yAx = ["A","B", "C", "D", "E", "F", "G"];
 
@@ -28,24 +36,26 @@ const gameBoard = {
         return gameBoardObj;
         },
 
-    ship: (length, status, boardLocation, pushLoc) => {
+    ship: (length, status, boardLocation, player) => {
         return {
             length,
             status,
             boardLocation,
-            pushLoc: ()=> {
-                ships.push(ship); 
-            }      
-           
+            player
         }   
-        
-        console.log(ships);
     }  
 };
 
-gameBoard.board(xAx,yAx);
+const placeShip = (piece, status, placement, player) => {
+    let shipObject = gameBoard.ship(piece, status, placement, player);
+    ships.push(shipObject);
+    // update gameboard Obj with placement.
+};
 
-gameBoard
+gameBoard.board(xAx,yAx);
+// placeShip(gamePieces.carrier, "OK", "[A1, A2, A3, A4, A5]", "player 1");
+
+
 const hit = (y, x) => {
     // this needs the gameboard
     
@@ -54,3 +64,5 @@ const hit = (y, x) => {
 
 module.exports.gameBoard = gameBoard.board;
 module.exports.ship = gameBoard.ship;
+module.exports.placeShip = placeShip;
+module.exports.gamePieces = gamePieces;
