@@ -49,11 +49,18 @@ const gameBoard = {
 const placeShip = (piece, status, placement, player) => {
     let shipObject = gameBoard.ship(piece, status, placement, player);
     ships.push(shipObject);
-    // update gameboard Obj with placement.
+        shipObject.boardLocation.forEach(value => {
+            //updates gameBoardObj 
+            gameBoardObj[value].controlled = shipObject.player;
+            gameBoardObj[value].type = "occupied";
+
+          });
+       
+    return  gameBoardObj;
 };
 
 gameBoard.board(xAx,yAx);
-// placeShip(gamePieces.carrier, "OK", "[A1, A2, A3, A4, A5]", "player 1");
+placeShip(gamePieces.carrier, "OK", ['A1', 'A2', 'A3', 'A4', 'A5'], "player 1");
 
 
 const hit = (y, x) => {

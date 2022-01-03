@@ -13,8 +13,7 @@ test('ship test', () =>{
 });
 
 test('ship gen', ()=> {
-    expect(placeShip("5", "OK", "['A1', 'A2', 'A3', 'A4', 'A5']", "player 1")).toEqual({"length": "5", "status": "OK", "boardLocation":"['A1', 'A2', 'A3', 'A4', 'A5']", 
-"player": "player 1"});
+    expect(placeShip("5", "OK", ['A1', 'A2', 'A3', 'A4', 'A5'], "player 1")).toEqual(['A1', 'A2', 'A3', 'A4', 'A5']);
 });
 
 
