@@ -6,12 +6,20 @@
 const gameBoardObj = {};
 const ships = [];
 
+// const gamePieces = {
+//     carrier: 5,
+//     battleship: 4,
+//     cruiser: 3,
+//     submarine: 3,
+//     destroyer: 2
+// };
+
 const gamePieces = {
-    carrier: 5,
-    battleship: 4,
-    cruiser: 3,
-    submarine: 3,
-    destroyer: 2
+    carrier: ['carrier', 5],
+    battleship: ['battleship', 4],
+    cruiser: ['cruiser' ,3],
+    submarine: ['submarine' ,3],
+    destroyer: ['destroyer ',2]
 };
 
 const xAx = [1,2,3,4,5,6,7,8];
@@ -36,9 +44,9 @@ const gameBoard = {
         return gameBoardObj;
         },
 
-    ship: (length, status, boardLocation, player) => {
+    ship: (gamePiece, status, boardLocation, player) => {
         return {
-            length,
+            gamePiece,
             status,
             boardLocation,
             player
@@ -52,11 +60,11 @@ const placeShip = (piece, status, placement, player) => {
         shipObject.boardLocation.forEach(value => {
             //updates gameBoardObj 
             gameBoardObj[value].controlled = shipObject.player;
-            gameBoardObj[value].type = "occupied";
-
+            gameBoardObj[value].type = shipObject.gamePiece[0];
+            gameBoardObj[value].length = shipObject.gamePiece[1];
+            // trying to get carrier name.
           });
-       
-    return  gameBoardObj;
+          return gameBoardObj;
 };
 
 gameBoard.board(xAx,yAx);
