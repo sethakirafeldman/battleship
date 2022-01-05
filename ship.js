@@ -6,14 +6,6 @@
 const gameBoardObj = {};
 const ships = [];
 
-// const gamePieces = {
-//     carrier: 5,
-//     battleship: 4,
-//     cruiser: 3,
-//     submarine: 3,
-//     destroyer: 2
-// };
-
 const gamePieces = {
     carrier: ['carrier', 5],
     battleship: ['battleship', 4],
@@ -62,9 +54,8 @@ const placeShip = (piece, status, placement, player) => {
             gameBoardObj[value].controlled = shipObject.player;
             gameBoardObj[value].type = shipObject.gamePiece[0];
             gameBoardObj[value].length = shipObject.gamePiece[1];
-            // trying to get carrier name.
           });
-          return gameBoardObj;
+        return gameBoardObj;
 };
 
 gameBoard.board(xAx,yAx);
@@ -72,7 +63,8 @@ placeShip(gamePieces.carrier, "OK", ['A1', 'A2', 'A3', 'A4', 'A5'], "player 1");
 
 
 const hit = (y, x) => {
-    // this needs the gameboard
+    let strike = y+x;
+    return gameBoardObj[strike].status = "hit";
     
     //isSunk function inside to check when BS is sunk.
 };
@@ -81,3 +73,4 @@ module.exports.gameBoard = gameBoard.board;
 module.exports.ship = gameBoard.ship;
 module.exports.placeShip = placeShip;
 module.exports.gamePieces = gamePieces;
+module.exports.hit = hit;
