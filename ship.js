@@ -36,19 +36,20 @@ const gameBoard = {
         return gameBoardObj;
         },
 
-    ship: (gamePiece, status, boardLocation, player) => {
+    ship: (gamePiece, boardLocation, player) => {
         return {
             gamePiece,
-            status,
-            boardLocation,
-            player
-        }   
-    }  
+            boardLocation, 
+            player, 
+            status: {}
+         }        
+    }
 };
 
-const placeShip = (piece, status, placement, player) => {
-    let shipObject = gameBoard.ship(piece, status, placement, player);
+const placeShip = (piece, placement, player) => {
+    let shipObject = gameBoard.ship(piece, placement, player);
     ships.push(shipObject);
+    console.warn(shipObject);
         shipObject.boardLocation.forEach(value => {
             //updates gameBoardObj 
             gameBoardObj[value].controlled = shipObject.player;
@@ -59,18 +60,26 @@ const placeShip = (piece, status, placement, player) => {
 };
 
 gameBoard.board(xAx,yAx);
-placeShip(gamePieces.carrier, "OK", ['A1', 'A2', 'A3', 'A4', 'A5'], "player 1");
+placeShip(gamePieces.carrier, ['A1', 'A2', 'A3', 'A4', 'A5'], "player 1");
 
+const isSunk = () => {
 
-const hit = (y, x) => {
-    let strike = y+x;
-    return gameBoardObj[strike].status = "hit";
-    
-    //isSunk function inside to check when BS is sunk.
 };
 
-module.exports.gameBoard = gameBoard.board;
+const hit = (y, x) => {  
+     let strike = y+x;
+     gameBoardObj[strike].status = "hit";
+     ships.forEach(ship => {
+        if (gameBoardObj[strike].status == "hit") {
+               ship.status[strike] = "hit";     
+           }
+    });
+    // return isSunk();
+};
+
+// module.exports.gameBoard = gameBoard.board;
 module.exports.ship = gameBoard.ship;
 module.exports.placeShip = placeShip;
 module.exports.gamePieces = gamePieces;
 module.exports.hit = hit;
+// module.exports.isSunk = isSunk;

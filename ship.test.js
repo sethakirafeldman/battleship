@@ -4,10 +4,11 @@ const ship = gameFunc.ship;
 const placeShip = gameFunc.placeShip;
 const gamePieces = gameFunc.gamePieces;
 const hit = gameFunc.hit;
+const isSunk = gameFunc.isSunk;
 const board = gameFunc.gameBoard.board;
 
 test('ship test', () =>{
-    expect(ship(gamePieces.destroyer,"OK", "['d6','d7']", "player 1")).toEqual({"boardLocation": "['d6','d7']", "gamePiece": ["destroyer ", 2], "player": "player 1", "status": "OK"});
+    expect(ship(gamePieces.destroyer,"OK", "['d6','d7']", "player 1")).toEqual({"boardLocation": {"position": "['d6','d7']",}, "gamePiece": ["destroyer ", 2], "player": "player 1", "status": "OK"});
 });
 
 test('ship gen', ()=> {
@@ -17,3 +18,7 @@ test('ship gen', ()=> {
 test('hit test', () => {
     expect(hit("A","1")).toEqual("hit");
 });
+
+// test('sunk check', ()=> {
+//     expect(isSunk()).toEqual("something");
+// });
