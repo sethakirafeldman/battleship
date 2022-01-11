@@ -49,7 +49,6 @@ const gameBoard = {
 const placeShip = (piece, placement, player) => {
     let shipObject = gameBoard.ship(piece, placement, player);
     ships.push(shipObject);
-    console.warn(shipObject);
         shipObject.boardLocation.forEach(value => {
             //updates gameBoardObj 
             gameBoardObj[value].controlled = shipObject.player;
@@ -63,7 +62,27 @@ gameBoard.board(xAx,yAx);
 placeShip(gamePieces.carrier, ['A1', 'A2', 'A3', 'A4', 'A5'], "player 1");
 
 const isSunk = () => {
+    let hitCheck = [];
+    console.log("isSunk");
+    // go through each ship in ships[]
+    ships.forEach((ship)=>{
 
+        ship.boardLocation.forEach((pos)=> {
+            if (ship.status[pos] == "hit") {
+                hitCheck.push(true);
+                console.log(ship.gamePiece[0]+" has been hit at "+ pos);
+                if (hitCheck.length ===ship.boardLocation.length){
+                    console.log(ship.gamePiece[0]+" has been sunk");
+                    return ship.gamePiece[0]+" has been sunk";
+                }
+            }
+            else if (ship.status[pos] !== "hit") {
+                // console.log(ship.gamePiece[0]+" has not been hit at "+ pos);
+            }
+        });
+    });
+
+    // check if full length of board location have status of hit
 };
 
 const hit = (y, x) => {  
@@ -71,11 +90,17 @@ const hit = (y, x) => {
      gameBoardObj[strike].status = "hit";
      ships.forEach(ship => {
         if (gameBoardObj[strike].status == "hit") {
-               ship.status[strike] = "hit";     
+               return ship.status[strike] = "hit";     
            }
     });
-    // return isSunk();
+    isSunk();
 };
+
+hit("A",5);
+hit("A",3);
+hit("A",2);
+hit("A",1);
+// hit("A",4);
 
 // module.exports.gameBoard = gameBoard.board;
 module.exports.ship = gameBoard.ship;
