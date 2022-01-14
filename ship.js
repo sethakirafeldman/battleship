@@ -71,10 +71,10 @@ const ships = {
               });
             return shipObject;
     },
-    isSunk: () => {
+    isSunk: (player) => {
         let hitCheck = [];
         // go through each ship in ships[]
-        player.ships.forEach((ship)=>{
+        players[player].ships.forEach((ship)=>{
             ship.boardLocation.forEach((pos)=> {
                 if (ship.status[pos] == "hit") {
                     hitCheck.push(true);
@@ -93,19 +93,20 @@ const ships = {
 //hits separate.
     hit: (player, y, x) => {  
         let strike = y+x;
-        if ( gameBoardObj[player][strike].controlled !== 'no'){ 
-            gameBoardObj[player][strike].status = "hit";
-            ships.forEach(ship => {
+        if ( gameBoardObj[player][strike].controlled !== 'no') { 
+            gameBoardObj[player][strike]["status"] = "hit";
+
+            players[player].ships.forEach(ship => {
                 if (gameBoardObj[player][strike].status == "hit") {
                     return ship.status[strike] = "hit";     
                 } 
             });
         }
         else {
-            gameBoardObj[strike].status = "missed";
+            gameBoardObj[player][strike].status = "missed";
             return "miss";
         }
-        isSunk();
+        ships.isSunk(player);
         return strike + " has been hit";
     }
 };
@@ -114,14 +115,14 @@ const ships = {
 // gameBoard.board(xAx,yAx);
 
 ships.placeShip(gamePieces.carrier, ['A1', 'A2', 'A3', 'A4', 'A5'], "playerOne");
-// placeShip(gamePieces.carrier, ['B1', 'B2', 'B3', 'B4', 'B5'], "playerTwo");
+// ships.placeShip(gamePieces.carrier, ['B1', 'B2', 'B3', 'B4', 'B5'], "playerTwo");
 
 
 
 
-// hit("A",5);
+ships.hit("playerOne","A",1);
 // hit("A",3);
-// hit("A",2);
+ships.hit("playerOne","A",2);
 // hit("A",1);
 // hit("A",4);
 
