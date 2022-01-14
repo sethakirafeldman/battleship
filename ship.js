@@ -1,7 +1,5 @@
 //https://www.hasbro.com/common/instruct/Battleship.PDF
 const gameBoardObj = {};
-const ships = [];
-
 const gamePieces = {
     carrier: ['carrier', 5],
     battleship: ['battleship', 4],
@@ -35,29 +33,6 @@ const gameBoard = {
         };
         return gameBoardObj[player];
         },
-
-    ship: (gamePiece, boardLocation, player) => {
-        return {
-            gamePiece,
-            boardLocation, 
-            player, 
-            status: {}
-         }        
-    }
-
-    
-};
-const placeShip = (piece, placement, player) => {
-    let shipObject = gameBoard.ship(piece, placement, player);
-    player.ships.push(shipObject);
-    console.log(shipObject);
-        shipObject.boardLocation.forEach(value => {
-            //updates gameBoardObj 
-            players[player].board[value].controlled =shipObject.player;
-            players[player].board[value].type = shipObject.gamePiece[0];
-            players[player].board[value].length = shipObject.gamePiece[1];
-          });
-        return shipObject;
 };
 
 const players = {
@@ -74,49 +49,75 @@ const players = {
         ships: []
     }
 };
+
+
+const ships = {
+    genShip: (gamePiece, boardLocation, player) => {
+        return {
+            gamePiece,
+            boardLocation, 
+            player, 
+            status: {}
+         }        
+    },
+    placeShip: (piece, placement, player) => {
+        let shipObject = ships.genShip(piece, placement, player);
+        players[player].ships.push(shipObject);
+            shipObject.boardLocation.forEach(value => {
+                //updates gameBoardObj 
+                players[player].board[value].controlled =shipObject.player;
+                players[player].board[value].type = shipObject.gamePiece[0];
+                players[player].board[value].length = shipObject.gamePiece[1];
+              });
+            return shipObject;
+    },
+    isSunk: () => {
+        let hitCheck = [];
+        // go through each ship in ships[]
+        player.ships.forEach((ship)=>{
+            ship.boardLocation.forEach((pos)=> {
+                if (ship.status[pos] == "hit") {
+                    hitCheck.push(true);
+                    console.log(ship.gamePiece[0]+" has been hit at "+ pos);
+                    if (hitCheck.length ===ship.boardLocation.length){
+                        return true;
+                    }
+                }
+                else {
+                    return false;
+                }
+            });
+        });
+    },
+    //ships will need to be an array under each player to keep
+//hits separate.
+    hit: (player, y, x) => {  
+        let strike = y+x;
+        if ( gameBoardObj[player][strike].controlled !== 'no'){ 
+            gameBoardObj[player][strike].status = "hit";
+            ships.forEach(ship => {
+                if (gameBoardObj[player][strike].status == "hit") {
+                    return ship.status[strike] = "hit";     
+                } 
+            });
+        }
+        else {
+            gameBoardObj[strike].status = "missed";
+            return "miss";
+        }
+        isSunk();
+        return strike + " has been hit";
+    }
+};
+
+
 // gameBoard.board(xAx,yAx);
 
-// placeShip(gamePieces.carrier, ['A1', 'A2', 'A3', 'A4', 'A5'], "playerOne");
+ships.placeShip(gamePieces.carrier, ['A1', 'A2', 'A3', 'A4', 'A5'], "playerOne");
 // placeShip(gamePieces.carrier, ['B1', 'B2', 'B3', 'B4', 'B5'], "playerTwo");
 
-const isSunk = () => {
-    let hitCheck = [];
-    // go through each ship in ships[]
-    player.ships.forEach((ship)=>{
-        ship.boardLocation.forEach((pos)=> {
-            if (ship.status[pos] == "hit") {
-                hitCheck.push(true);
-                console.log(ship.gamePiece[0]+" has been hit at "+ pos);
-                if (hitCheck.length ===ship.boardLocation.length){
-                    return true;
-                }
-            }
-            else {
-                return false;
-            }
-        });
-    });
-};
-//ships will need to be an array under each player to keep
-//hits separate.
-const hit = (player, y, x) => {  
-     let strike = y+x;
-    if ( gameBoardObj[player][strike].controlled !== 'no'){ 
-        gameBoardObj[player][strike].status = "hit";
-        ships.forEach(ship => {
-            if (gameBoardObj[player][strike].status == "hit") {
-                return ship.status[strike] = "hit";     
-           } 
-        });
-    }
-    else {
-        gameBoardObj[strike].status = "missed";
-        return "miss";
-    }
 
-    isSunk();
-    return strike + " has been hit";
-};
+
 
 // hit("A",5);
 // hit("A",3);
@@ -125,9 +126,9 @@ const hit = (player, y, x) => {
 // hit("A",4);
 
 // module.exports.gameBoard = gameBoard.board;
-module.exports.ship = gameBoard.ship;
-module.exports.placeShip = placeShip;
+module.exports.genShip = ships.genShip;
+module.exports.placeShip = ships.placeShip;
 module.exports.gamePieces = gamePieces;
-module.exports.hit = hit;
-module.exports.isSunk = isSunk;
+module.exports.hit = ships.hit;
+module.exports.isSunk = ships.isSunk;
 module.exports.players = players;
