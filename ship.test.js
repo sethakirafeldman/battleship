@@ -8,13 +8,13 @@ const isSunk = gameFunc.isSunk;
 const players = gameFunc.players;
 // const board = gameFunc.gameBoard;
 
-test('ship test', () =>{
-    expect(ship(gamePieces.destroyer,"['d6','d7']","playerOne")).toEqual("");
-});
+// test('ship test', () =>{
+//     expect(ship(gamePieces.destroyer,"['d6','d7']","playerOne")).toEqual("");
+// });
 
-test('ship gen', ()=> {
-    expect(placeShip(gamePieces.carrier, ['A1', 'A2', 'A3', 'A4', 'A5'], "player 1")).toEqual({"boardLocation": ["A1", "A2", "A3", "A4", "A5"], "gamePiece": ["carrier", 5], "player": "player 1", "status": {}});
-});
+// test('ship gen', ()=> {
+//     expect(placeShip(gamePieces.carrier, ['A1', 'A2', 'A3', 'A4', 'A5'], "player 1")).toEqual({"boardLocation": ["A1", "A2", "A3", "A4", "A5"], "gamePiece": ["carrier", 5], "player": "player 1", "status": {}});
+// });
 
 test('hit test', () => {
     expect(hit("A","1")).toEqual("A1 has been hit");
@@ -29,6 +29,6 @@ test('miss test', () => {
 //     expect(isSunk()).toEqual("something");
 // });
 
-test('players', () => {
-    expect(console.log(players.playerOne)).toBe("test");
-});
+// test('players', () => {
+//     expect(console.log(players.playerOne)).toBe("test");
+// });
