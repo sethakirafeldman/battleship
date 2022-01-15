@@ -111,6 +111,37 @@ const ships = {
     }
 };
 
+const buildDOM = {
+    buildGrid: () => {
+        const p2Grid = document.getElementById("grid-two");
+        let p1Grid = document.getElementById("grid-one");
+
+        xAx.forEach((numb)=> {
+            let numHead = document.createElement("div");
+            numHead.innerText = numb;
+            numHead.classList.add("grid-heading");
+            p1Grid.append(numHead);
+        });
+
+        yAx.forEach((lett)=>{
+            let lettHead = document.createElement("div");
+            lettHead.innerText = lett;
+            lettHead.classList.add("grid-heading");
+            if () {
+                
+            }
+           // this will need to target correct row based on letter prefix.
+
+        });
+
+        Object.keys(gameBoardObj["playerOne"]).forEach((one) => {
+            let gridDiv = document.createElement("div");
+            gridDiv.id = `${one}`;
+            gridDiv.classList.add("grid-item");
+            p1Grid.append(gridDiv);
+        });
+    }
+};
 
 // gameBoard.board(xAx,yAx);
 
@@ -125,6 +156,8 @@ ships.hit("playerOne","A",1);
 ships.hit("playerOne","A",2);
 // hit("A",1);
 // hit("A",4);
+
+buildDOM.buildGrid();
 
 // module.exports.gameBoard = gameBoard.board;
 module.exports.genShip = ships.genShip;

@@ -33,10 +33,6 @@ test('miss test', () => {
     expect(hit("playerOne","D","1")).toEqual("miss");
 });
 
-// test('sunk check', ()=> {
-//     expect(isSunk()).toEqual("something");
-// });
-
 // test('players', () => {
 //     expect(console.log(players.playerOne)).toBe("test");
 // });
