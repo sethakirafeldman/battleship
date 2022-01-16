@@ -112,33 +112,34 @@ const ships = {
 };
 
 const buildDOM = {
-    buildGrid: () => {
-        const p2Grid = document.getElementById("grid-two");
-        let p1Grid = document.getElementById("grid-one");
-
-        xAx.forEach((numb)=> {
+    buildGrid: (pName) => {
+        let numSuffix = pName.slice(-3).toLowerCase();
+        let mkGrid = document.getElementById(`grid-${numSuffix}`);
+        let placeHolder = document.createElement("div");
+        mkGrid.append(placeHolder);
+        xAx.forEach((numb)=> { 
             let numHead = document.createElement("div");
             numHead.innerText = numb;
             numHead.classList.add("grid-heading");
-            p1Grid.append(numHead);
+            mkGrid.append(numHead);
         });
 
+        Object.keys(gameBoardObj[pName]).forEach((one) => {
+            let gridDiv = document.createElement("div");
+            gridDiv.id = `${pName}-${one}`;
+            // gridDiv.innerText = `${one}`;
+            gridDiv.classList.add("grid-item");
+            mkGrid.append(gridDiv);
+        });
+    
         yAx.forEach((lett)=>{
             let lettHead = document.createElement("div");
             lettHead.innerText = lett;
-            lettHead.classList.add("grid-heading");
-            if () {
-                
-            }
-           // this will need to target correct row based on letter prefix.
-
-        });
-
-        Object.keys(gameBoardObj["playerOne"]).forEach((one) => {
-            let gridDiv = document.createElement("div");
-            gridDiv.id = `${one}`;
-            gridDiv.classList.add("grid-item");
-            p1Grid.append(gridDiv);
+            lettHead.classList.add("letter-heading");
+            
+            let getLetter = document.getElementById(`${pName}-${lett}1`);
+            lettHead.innerText = lett;
+            getLetter.before(lettHead); 
         });
     }
 };
@@ -157,8 +158,8 @@ ships.hit("playerOne","A",2);
 // hit("A",1);
 // hit("A",4);
 
-buildDOM.buildGrid();
-
+buildDOM.buildGrid("playerOne");
+buildDOM.buildGrid("playerTwo");
 // module.exports.gameBoard = gameBoard.board;
 module.exports.genShip = ships.genShip;
 module.exports.placeShip = ships.placeShip;
