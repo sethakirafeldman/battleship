@@ -62,8 +62,12 @@ const ships = {
     },
     placeShip: (piece, placement, player) => {
         let shipObject = ships.genShip(piece, placement, player);
+
         players[player].ships.push(shipObject);
             shipObject.boardLocation.forEach(value => {
+                let shipSquare = document.getElementById(`${shipObject.player}-${value}`);
+                shipSquare.classList.add('ship');
+
                 //updates gameBoardObj 
                 players[player].board[value].controlled =shipObject.player;
                 players[player].board[value].type = shipObject.gamePiece[0];
@@ -95,6 +99,8 @@ const ships = {
         let strike = y+x;
         if ( gameBoardObj[player][strike].controlled !== 'no') { 
             gameBoardObj[player][strike]["status"] = "hit";
+            let hitSquare = document.getElementById(`${player}-${strike}`);
+            hitSquare.classList.add('hit');
 
             players[player].ships.forEach(ship => {
                 if (gameBoardObj[player][strike].status == "hit") {
@@ -112,6 +118,23 @@ const ships = {
 };
 
 const buildDOM = {
+
+    buildDrop: () => {
+
+        let dropDown = document.createElement("select");
+        dropDown.id = "dropdown-menu";
+        dropDown.appendChild(document.getElementById("drop-down"));
+
+        Object.keys(gamePieces).forEach( (piece)=> {
+            let menuItem = document.createElement("option");
+            menuItem.value = piece;
+            menuItem.innerText = piece;
+            dropDown.appendChild(menuItem);
+        });
+        document.getElementById("grid-container").append(dropClass);
+        // not sure why error.
+    },
+
     buildGrid: (pName) => {
         let numSuffix = pName.slice(-3).toLowerCase();
         let mkGrid = document.getElementById(`grid-${numSuffix}`);
@@ -146,20 +169,18 @@ const buildDOM = {
 
 // gameBoard.board(xAx,yAx);
 
-ships.placeShip(gamePieces.carrier, ['A1', 'A2', 'A3', 'A4', 'A5'], "playerOne");
+// ships.placeShip(gamePieces.carrier, ['A1', 'A2', 'A3', 'A4', 'A5'], "playerOne");
 // ships.placeShip(gamePieces.carrier, ['B1', 'B2', 'B3', 'B4', 'B5'], "playerTwo");
 
-
-
-
-ships.hit("playerOne","A",1);
+// ships.hit("playerOne","A",1);
 // hit("A",3);
-ships.hit("playerOne","A",2);
+// ships.hit("playerOne","A",2);
 // hit("A",1);
 // hit("A",4);
-
 buildDOM.buildGrid("playerOne");
 buildDOM.buildGrid("playerTwo");
+buildDOM.buildDrop();
+
 // module.exports.gameBoard = gameBoard.board;
 module.exports.genShip = ships.genShip;
 module.exports.placeShip = ships.placeShip;

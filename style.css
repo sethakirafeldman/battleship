@@ -17,3 +17,11 @@
 .letter-heading {
     padding: 10px 0;
 }
+
+.hit {
+    background-color: red;
+}
+
+.ship {
+    background-color: grey;
+}
