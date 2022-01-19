@@ -115,24 +115,31 @@ const ships = {
         ships.isSunk(player);
         return strike + " has been hit";
     }
+
 };
 
 const buildDOM = {
 
     buildDrop: () => {
-
-        let dropDown = document.createElement("select");
+        let dropDown = document.getElementById("drop-down");
+        let sel = document.createElement("select");
+        sel.id = "ship-selector";
+       
         dropDown.id = "dropdown-menu";
-        dropDown.appendChild(document.getElementById("drop-down"));
-
+        dropDown.appendChild(sel);
         Object.keys(gamePieces).forEach( (piece)=> {
             let menuItem = document.createElement("option");
             menuItem.value = piece;
             menuItem.innerText = piece;
-            dropDown.appendChild(menuItem);
+            sel.appendChild(menuItem);
         });
-        document.getElementById("grid-container").append(dropClass);
-        // not sure why error.
+        sel.addEventListener('change', ()=> {
+            console.log(sel.value);
+        });
+
+        // challenge is to change class of both vert and horiz
+        // selector for different ships.
+        
     },
 
     buildGrid: (pName) => {
