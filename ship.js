@@ -11,6 +11,8 @@ const gamePieces = {
 const xAx = [1,2,3,4,5,6,7,8];
 const yAx = ["A","B", "C", "D", "E", "F", "G"];
 
+
+
 const gameBoard = {
     board: (player, nums, letters) => {
       // A-G, 1-8
@@ -118,6 +120,7 @@ const ships = {
 
 };
 
+let selectedShip = gamePieces["carrier"];
 const buildDOM = {
 
     buildDrop: () => {
@@ -133,13 +136,16 @@ const buildDOM = {
             menuItem.innerText = piece;
             sel.appendChild(menuItem);
         });
+
+        // console.log(gamePieces[sel.value]);
         sel.addEventListener('change', ()=> {
-            console.log(sel.value);
+            selectedShip = gamePieces[sel.value];
+            // console.log(selectedShip);
         });
 
         // challenge is to change class of both vert and horiz
         // selector for different ships.
-        
+
     },
 
     buildGrid: (pName) => {
@@ -159,6 +165,21 @@ const buildDOM = {
             gridDiv.id = `${pName}-${one}`;
             // gridDiv.innerText = `${one}`;
             gridDiv.classList.add("grid-item");
+            // this needs to clear after each mousenter.
+            gridDiv.addEventListener("mouseenter", (e) =>{
+                let shipPlace = "";
+                //horizontal
+                let firstPos = e.target.id.slice(-2);//grabs A1
+                let lastPos = Number(firstPos.slice(-1)) + selectedShip[1];
+                let firstLetter = firstPos.charAt(0);
+                let firstDig = Number(firstPos.slice(-1));
+                let targ = lastPos - firstDig;
+                // increment to letter + targ.
+                for (let i = firstDig; i < lastPos; i++) {
+                    shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`)
+                    shipPlace.classList.add("ship");
+                }
+            });
             mkGrid.append(gridDiv);
         });
     
