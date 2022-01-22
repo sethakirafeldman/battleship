@@ -11,7 +11,21 @@ const gamePieces = {
 const xAx = [1,2,3,4,5,6,7,8];
 const yAx = ["A","B", "C", "D", "E", "F", "G"];
 
+const elFactory = (type, id, innerText, parStr, appendType) => {
+    const element = document.createElement(type);
+    let parent = document.getElementById(parStr);
+    element.id = id;
+    element.innerText = innerText;
 
+    if (appendType == "appendChild") {
+        parent.appendChild(element);
+    }
+    else if (appendType == "prepend"){
+        parent.prepend(element);
+    }
+
+    return element;
+};
 
 const gameBoard = {
     board: (player, nums, letters) => {
@@ -124,28 +138,35 @@ let selectedShip = gamePieces["carrier"];
 const buildDOM = {
 
     buildDrop: () => {
-        let dropDown = document.getElementById("drop-down");
+        // type, id, innerText, place, appendType
+        // elFactory("div", "dropdown-menu", "");
+        let dropDown = document.createElement("div");
+        dropDown.id = "dropdown-menu";
         let sel = document.createElement("select");
         sel.id = "ship-selector";
-       
-        dropDown.id = "dropdown-menu";
+        // let dropDown = document.getElementById("dropdown-menu");
+        document.getElementById("grid-container").prepend(dropDown);
         dropDown.appendChild(sel);
+
         Object.keys(gamePieces).forEach( (piece)=> {
             let menuItem = document.createElement("option");
             menuItem.value = piece;
             menuItem.innerText = piece;
             sel.appendChild(menuItem);
         });
-
-        // console.log(gamePieces[sel.value]);
         sel.addEventListener('change', ()=> {
             selectedShip = gamePieces[sel.value];
             // console.log(selectedShip);
         });
+        // type, id, innerText, parStr, appendType
+        elFactory("div", "direction-menu", "", "grid-container", "prepend");
+        elFactory("select", "dir-selector", "", "direction-menu", "appendChild");
+       
+        elFactory("option", "vert-opt", "vertical", "dir-selector", "appendChild");
+        elFactory("option", "horiz-opt", "horizontal", "dir-selector", "appendChild");
 
-        // challenge is to change class of both vert and horiz
-        // selector for different ships.
-
+        document.getElementById("vert-opt").value ="vertical";
+        document.getElementById("horiz-opt").value ="horizontal";
     },
 
     buildGrid: (pName) => {
@@ -163,9 +184,8 @@ const buildDOM = {
         Object.keys(gameBoardObj[pName]).forEach((one) => {
             let gridDiv = document.createElement("div");
             gridDiv.id = `${pName}-${one}`;
-            // gridDiv.innerText = `${one}`;
             gridDiv.classList.add("grid-item");
-            // this needs to clear after each mousenter.
+
             gridDiv.addEventListener("mouseenter", (e) =>{
                 let shipPlace = "";
                 //horizontal
@@ -173,11 +193,24 @@ const buildDOM = {
                 let lastPos = Number(firstPos.slice(-1)) + selectedShip[1];
                 let firstLetter = firstPos.charAt(0);
                 let firstDig = Number(firstPos.slice(-1));
-                let targ = lastPos - firstDig;
                 // increment to letter + targ.
                 for (let i = firstDig; i < lastPos; i++) {
                     shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`)
                     shipPlace.classList.add("ship");
+                }
+            });
+
+            gridDiv.addEventListener("mouseleave", (e) => {
+                let firstPos = e.target.id.slice(-2);//grabs A1
+                let lastPos = Number(firstPos.slice(-1)) + selectedShip[1];
+                let firstLetter = firstPos.charAt(0);
+                let firstDig = Number(firstPos.slice(-1));
+
+                for (let i = firstDig; i < lastPos; i++) {
+                    shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`)
+                    if (shipPlace.classList.contains("ship")){
+                        shipPlace.classList.remove("ship");
+                    }
                 }
             });
             mkGrid.append(gridDiv);
