@@ -66,7 +66,6 @@ const players = {
     }
 };
 
-
 const ships = {
     genShip: (gamePiece, boardLocation, player) => {
         return {
@@ -85,7 +84,7 @@ const ships = {
                 shipSquare.classList.add('ship');
 
                 //updates gameBoardObj 
-                players[player].board[value].controlled =shipObject.player;
+                players[player].board[value].controlled = shipObject.player;
                 players[player].board[value].type = shipObject.gamePiece[0];
                 players[player].board[value].length = shipObject.gamePiece[1];
               });
@@ -109,8 +108,6 @@ const ships = {
             });
         });
     },
-    //ships will need to be an array under each player to keep
-//hits separate.
     hit: (player, y, x) => {  
         let strike = y+x;
         if ( gameBoardObj[player][strike].controlled !== 'no') { 
@@ -138,15 +135,11 @@ let selectedShip = gamePieces["carrier"];
 const buildDOM = {
 
     buildDrop: () => {
-        // type, id, innerText, place, appendType
-        // elFactory("div", "dropdown-menu", "");
-        let dropDown = document.createElement("div");
-        dropDown.id = "dropdown-menu";
-        let sel = document.createElement("select");
-        sel.id = "ship-selector";
-        // let dropDown = document.getElementById("dropdown-menu");
-        document.getElementById("grid-container").prepend(dropDown);
-        dropDown.appendChild(sel);
+        // type, id, innerText, parStr, appendType
+        elFactory("div", "dropdown-menu", "", "grid-container", "prepend");
+        elFactory("select", "ship-selector","", "dropdown-menu","appendChild");
+
+        let sel = document.getElementById("ship-selector");
 
         Object.keys(gamePieces).forEach( (piece)=> {
             let menuItem = document.createElement("option");
@@ -156,17 +149,22 @@ const buildDOM = {
         });
         sel.addEventListener('change', ()=> {
             selectedShip = gamePieces[sel.value];
-            // console.log(selectedShip);
         });
         // type, id, innerText, parStr, appendType
         elFactory("div", "direction-menu", "", "grid-container", "prepend");
         elFactory("select", "dir-selector", "", "direction-menu", "appendChild");
-       
-        elFactory("option", "vert-opt", "vertical", "dir-selector", "appendChild");
         elFactory("option", "horiz-opt", "horizontal", "dir-selector", "appendChild");
+        elFactory("option", "vert-opt", "vertical", "dir-selector", "appendChild");
+        gameBoardObj["direction"] = "horizontal";
+        buildDOM.addPlacement();
 
+        let dirSel = document.getElementById("dir-selector");
         document.getElementById("vert-opt").value ="vertical";
         document.getElementById("horiz-opt").value ="horizontal";
+        dirSel.addEventListener('change', () => {
+            gameBoardObj["direction"] = dirSel.value;
+            buildDOM.addPlacement();
+        });
     },
 
     buildGrid: (pName) => {
@@ -185,34 +183,6 @@ const buildDOM = {
             let gridDiv = document.createElement("div");
             gridDiv.id = `${pName}-${one}`;
             gridDiv.classList.add("grid-item");
-
-            gridDiv.addEventListener("mouseenter", (e) =>{
-                let shipPlace = "";
-                //horizontal
-                let firstPos = e.target.id.slice(-2);//grabs A1
-                let lastPos = Number(firstPos.slice(-1)) + selectedShip[1];
-                let firstLetter = firstPos.charAt(0);
-                let firstDig = Number(firstPos.slice(-1));
-                // increment to letter + targ.
-                for (let i = firstDig; i < lastPos; i++) {
-                    shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`)
-                    shipPlace.classList.add("ship");
-                }
-            });
-
-            gridDiv.addEventListener("mouseleave", (e) => {
-                let firstPos = e.target.id.slice(-2);//grabs A1
-                let lastPos = Number(firstPos.slice(-1)) + selectedShip[1];
-                let firstLetter = firstPos.charAt(0);
-                let firstDig = Number(firstPos.slice(-1));
-
-                for (let i = firstDig; i < lastPos; i++) {
-                    shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`)
-                    if (shipPlace.classList.contains("ship")){
-                        shipPlace.classList.remove("ship");
-                    }
-                }
-            });
             mkGrid.append(gridDiv);
         });
     
@@ -225,6 +195,39 @@ const buildDOM = {
             lettHead.innerText = lett;
             getLetter.before(lettHead); 
         });
+    },
+
+    addPlacement: () => {
+        // need to get gameBoardObj["playerOne"] data
+        if (gameBoardObj["direction"] == "horizontal") {
+            Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
+                let divMod = document.getElementById(`playerOne-${key}`);
+                divMod.addEventListener("mouseenter", (e) =>{
+                    let shipPlace = "";
+                    let firstPos = e.target.id.slice(-2);//grabs A1
+                    let lastPos = Number(firstPos.slice(-1)) + selectedShip[1];
+                    let firstLetter = firstPos.charAt(0);
+                    let firstDig = Number(firstPos.slice(-1));
+                    // increment to letter + targ.
+                    for (let i = firstDig; i < lastPos; i++) {
+                        shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`)
+                        shipPlace.classList.add("ship");
+                    }
+            });
+                divMod.addEventListener("mouseleave", (e) => {
+                    let firstPos = e.target.id.slice(-2);//grabs A1
+                    let lastPos = Number(firstPos.slice(-1)) + selectedShip[1];
+                    let firstLetter = firstPos.charAt(0);
+                    let firstDig = Number(firstPos.slice(-1));
+                    for (let i = firstDig; i < lastPos; i++) {
+                        shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`)
+                        if (shipPlace.classList.contains("ship")) {
+                            shipPlace.classList.remove("ship");
+                        }
+                    }
+                });
+            });
+        }
     }
 };
 
