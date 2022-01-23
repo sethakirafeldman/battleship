@@ -198,36 +198,62 @@ const buildDOM = {
     },
 
     addPlacement: () => {
-        // need to get gameBoardObj["playerOne"] data
+        // only grabs platerOne squares.
         if (gameBoardObj["direction"] == "horizontal") {
             Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
                 let divMod = document.getElementById(`playerOne-${key}`);
-                divMod.addEventListener("mouseenter", (e) =>{
-                    let shipPlace = "";
-                    let firstPos = e.target.id.slice(-2);//grabs A1
+                divMod.addEventListener("click", (e) => {
+                    let firstPos = e.target.id.slice(-2);//grabs A1, etc.
                     let lastPos = Number(firstPos.slice(-1)) + selectedShip[1];
                     let firstLetter = firstPos.charAt(0);
                     let firstDig = Number(firstPos.slice(-1));
-                    // increment to letter + targ.
-                    for (let i = firstDig; i < lastPos; i++) {
-                        shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`)
-                        shipPlace.classList.add("ship");
+                    gameBoardObj["allowPlacement"] = [];
+
+                    for (let i = lastPos; i >= firstDig; i--) {
+                        let shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`)
+                        if (shipPlace == null) {
+                            gameBoardObj["allowPlacement"].push(false);
+                        } 
+                        else {
+                            shipPlace.classList.add("ship");
+                            gameBoardObj["allowPlacement"].push(true);
+                        }
                     }
+                    
             });
-                divMod.addEventListener("mouseleave", (e) => {
+                divMod.addEventListener("", (e) => {
                     let firstPos = e.target.id.slice(-2);//grabs A1
                     let lastPos = Number(firstPos.slice(-1)) + selectedShip[1];
                     let firstLetter = firstPos.charAt(0);
                     let firstDig = Number(firstPos.slice(-1));
-                    for (let i = firstDig; i < lastPos; i++) {
-                        shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`)
-                        if (shipPlace.classList.contains("ship")) {
+                    for (let i = lastPos; i >= firstDig; i--) {
+                        let shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`)
+                        if (shipPlace ==null) {
+                        }
+                        else {
                             shipPlace.classList.remove("ship");
                         }
                     }
                 });
+
+
             });
+            // this needs to add class to those clicked so that it stays on board.
+            divMod.addEventListener("click", (e) => {
+                if (gameBoardObj["allowPlacement"].includes(false) ) {
+                    console.log("cannot place ship");
+                }
+                else {
+                    shipPlace.classList.add("freeze");
+                }
+            });    
+
         }
+
+        else if (gameBoardObj["direction"] == "vertical") {
+     
+
+        }  
     }
 };
 
