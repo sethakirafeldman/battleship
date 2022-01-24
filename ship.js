@@ -202,14 +202,15 @@ const buildDOM = {
         if (gameBoardObj["direction"] == "horizontal") {
             Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
                 let divMod = document.getElementById(`playerOne-${key}`);
-                divMod.addEventListener("click", (e) => {
+                divMod.addEventListener("mouseenter", (e) => {
                     let firstPos = e.target.id.slice(-2);//grabs A1, etc.
                     let lastPos = Number(firstPos.slice(-1)) + selectedShip[1];
                     let firstLetter = firstPos.charAt(0);
                     let firstDig = Number(firstPos.slice(-1));
+                    let placedArr = [];
                     gameBoardObj["allowPlacement"] = [];
 
-                    for (let i = lastPos; i >= firstDig; i--) {
+                    for (let i = lastPos; i >  firstDig; i--) {
                         let shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`)
                         if (shipPlace == null) {
                             gameBoardObj["allowPlacement"].push(false);
@@ -218,36 +219,32 @@ const buildDOM = {
                             shipPlace.classList.add("ship");
                             gameBoardObj["allowPlacement"].push(true);
                         }
-                    }
-                    
-            });
-                divMod.addEventListener("", (e) => {
-                    let firstPos = e.target.id.slice(-2);//grabs A1
-                    let lastPos = Number(firstPos.slice(-1)) + selectedShip[1];
-                    let firstLetter = firstPos.charAt(0);
-                    let firstDig = Number(firstPos.slice(-1));
-                    for (let i = lastPos; i >= firstDig; i--) {
-                        let shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`)
-                        if (shipPlace ==null) {
-                        }
-                        else {
-                            shipPlace.classList.remove("ship");
-                        }
-                    }
+                        divMod.addEventListener("click", (e) => {
+                            if (gameBoardObj["allowPlacement"].includes(false) ) {
+                                console.log(gameBoardObj["allowPlacement"]);
+                            }
+                            else {
+                                
+                                shipPlace.classList.add("placed-ship");
+                                //pass in gamepiece, coordinates, and player
+                                placedArr.push(`${firstLetter}${i}`);
+                                if (placedArr.length == selectedShip[1] ) {
+                                    ships.placeShip(selectedShip, placedArr, "playerOne");
+                                    console.log(gameBoardObj["playerOne"]);
+                                }
+                            }
+                        });                       
+                        divMod.addEventListener("mouseleave", (e) => {
+                            if (shipPlace ==null) {
+                            }
+                            else {
+                                shipPlace.classList.remove("ship");
+           
+                            }
+                        });
+                    };          
                 });
-
-
             });
-            // this needs to add class to those clicked so that it stays on board.
-            divMod.addEventListener("click", (e) => {
-                if (gameBoardObj["allowPlacement"].includes(false) ) {
-                    console.log("cannot place ship");
-                }
-                else {
-                    shipPlace.classList.add("freeze");
-                }
-            });    
-
         }
 
         else if (gameBoardObj["direction"] == "vertical") {
