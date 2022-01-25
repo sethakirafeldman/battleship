@@ -11,6 +11,12 @@ const gamePieces = {
 const xAx = [1,2,3,4,5,6,7,8];
 const yAx = ["A","B", "C", "D", "E", "F", "G"];
 
+const clearEvents = (el, parent) => {
+    // let divMod = document.getElementById(`playerOne-${key}`);
+    let clone = el.cloneNode(true);
+    parent.replaceChild(clone, el);
+};
+
 const elFactory = (type, id, innerText, parStr, appendType) => {
     const element = document.createElement(type);
     let parent = document.getElementById(parStr);
@@ -200,6 +206,7 @@ const buildDOM = {
     addPlacement: () => {
         // only grabs platerOne squares.
         if (gameBoardObj["direction"] == "horizontal") {
+    
             Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
                 let divMod = document.getElementById(`playerOne-${key}`);
                 divMod.addEventListener("mouseenter", (e) => {
@@ -248,16 +255,41 @@ const buildDOM = {
         }
 
         else if (gameBoardObj["direction"] == "vertical") {
-     
+            // increment/decrement using yAx array of letters.
+            // adds eventlisteners to each grid square.
+          
+            Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
+                //remove  event listeners within grid-one
+                let divMod = document.getElementById(`playerOne-${key}`);
+                clearEvents(divMod, document.getElementById("grid-one"));
+
+                // let divMod = document.getElementById(`playerOne-${key}`);
+                // let clone = divMod.cloneNode(true);
+                // document.getElementById("grid-one").replaceChild(clone, divMod);
+
+
+                // divMod.addEventListener("mouseenter", (event) => {
+                //     // index of yAx values must decrement
+                //     let firstPos = event.target.id.slice(-2);//grabs A1, etc.
+                //     let lastPos = Number(firstPos.slice(-1)) + selectedShip[1];
+                //     let firstLetter = firstPos.charAt(0);
+                //     let firstDig = Number(firstPos.slice(-1));
+                //     let placedArr = [];
+                //     gameBoardObj["allowPlacement"] = [];
+                //     console.log(firstLetter);
+                // });
+
+            });
+
+            
 
         }  
     }
 };
 
-// gameBoard.board(xAx,yAx);
 
-// ships.placeShip(gamePieces.carrier, ['A1', 'A2', 'A3', 'A4', 'A5'], "playerOne");
-// ships.placeShip(gamePieces.carrier, ['B1', 'B2', 'B3', 'B4', 'B5'], "playerTwo");
+
+// gameBoard.board(xAx,yAx);
 
 // ships.hit("playerOne","A",1);
 // hit("A",3);
