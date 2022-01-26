@@ -206,7 +206,14 @@ const buildDOM = {
     addPlacement: () => {
         // only grabs platerOne squares.
         if (gameBoardObj["direction"] == "horizontal") {
-    
+
+            Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
+                let divMod = document.getElementById(`playerOne-${key}`);
+                //remove  event listeners within grid-one
+                clearEvents(divMod, document.getElementById("grid-one"));
+                gameBoardObj["allowPlacement"] = [];
+            });
+
             Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
                 let divMod = document.getElementById(`playerOne-${key}`);
                 divMod.addEventListener("mouseenter", (e) => {
@@ -217,8 +224,8 @@ const buildDOM = {
                     let placedArr = [];
                     gameBoardObj["allowPlacement"] = [];
 
-                    for (let i = lastPos; i >  firstDig; i--) {
-                        let shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`)
+                    for (let i = lastPos - 1; i >=  firstDig; i--) {
+                        let shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`);
                         if (shipPlace == null) {
                             gameBoardObj["allowPlacement"].push(false);
                         } 
@@ -228,10 +235,9 @@ const buildDOM = {
                         }
                         divMod.addEventListener("click", (e) => {
                             if (gameBoardObj["allowPlacement"].includes(false) ) {
-                                console.log(gameBoardObj["allowPlacement"]);
+                                // console.log(gameBoardObj["allowPlacement"]);
                             }
                             else {
-                                
                                 shipPlace.classList.add("placed-ship");
                                 //pass in gamepiece, coordinates, and player
                                 placedArr.push(`${firstLetter}${i}`);
@@ -255,35 +261,46 @@ const buildDOM = {
         }
 
         else if (gameBoardObj["direction"] == "vertical") {
-            // increment/decrement using yAx array of letters.
-            // adds eventlisteners to each grid square.
-          
             Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
-                //remove  event listeners within grid-one
                 let divMod = document.getElementById(`playerOne-${key}`);
+                //remove  event listeners within grid-one
                 clearEvents(divMod, document.getElementById("grid-one"));
+                gameBoardObj["allowPlacement"] = [];
+            });
+            // add events to playerOne squares.
+            Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
+                let divMod = document.getElementById(`playerOne-${key}`);
+                divMod.addEventListener("mouseenter", (event) => {
+                let firstLetter = key.charAt(0);
+                let endNumb= key.charAt(1); //stays static
+                let placedArr = []; // store A1, B1, etc.
+                firstLetter = yAx.indexOf(firstLetter);
 
-                // let divMod = document.getElementById(`playerOne-${key}`);
-                // let clone = divMod.cloneNode(true);
-                // document.getElementById("grid-one").replaceChild(clone, divMod);
+                for ( let i = firstLetter + selectedShip[1] - 1; i >= firstLetter ; i-- ) {
+                    let shipPlace = document.getElementById(`playerOne-${yAx[i]}${endNumb}`) 
+                    gameBoardObj["allowPlacement"] = [];
+                    if (shipPlace == null) {
+                        gameBoardObj["allowPlacement"].push(false);
+                        console.log(gameBoardObj["allowPlacement"]);
+                    }
+
+                    else if (shipPlace !== null ) { // 
+                        shipPlace.classList.add("ship");   
+                        gameBoardObj["allowPlacement"].push(true);
+
+                        divMod.addEventListener("mouseleave", (event) => {
+                            shipPlace.classList.remove("ship");
+                        });
+                    }
 
 
-                // divMod.addEventListener("mouseenter", (event) => {
-                //     // index of yAx values must decrement
-                //     let firstPos = event.target.id.slice(-2);//grabs A1, etc.
-                //     let lastPos = Number(firstPos.slice(-1)) + selectedShip[1];
-                //     let firstLetter = firstPos.charAt(0);
-                //     let firstDig = Number(firstPos.slice(-1));
-                //     let placedArr = [];
-                //     gameBoardObj["allowPlacement"] = [];
-                //     console.log(firstLetter);
-                // });
 
+                }
+                });
+               
             });
 
-            
-
-        }  
+        }
     }
 };
 
