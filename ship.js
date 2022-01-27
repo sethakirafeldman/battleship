@@ -229,27 +229,31 @@ const buildDOM = {
             // });
 
             clearEvents();
-
+            // goes through each playerOne square
             Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
                 let divMod = document.getElementById(`playerOne-${key}`);
-
+                //adds mouseenter event to each playerOne square. 
                 divMod.addEventListener("mouseenter", (e) => {
-                    let firstPos = e.target.id.slice(-2);//grabs A1, etc.
-                    let lastPos = Number(firstPos.slice(-1)) + selectedShip[1];
-                    let firstLetter = firstPos.charAt(0);
-                    let firstDig = Number(firstPos.slice(-1));
+                    let firstPos = e.target.id.slice(-2); //grabs A1, etc.
+                    let lastPos = Number(firstPos.slice(-1)) + selectedShip[1]; // last square of to be placed ship
+                    let firstLetter = firstPos.charAt(0); // first character, eg. A, B, etc.
+                    let firstDig = Number(firstPos.slice(-1)); // first digit 
                     let placedArr = [];
-                    gameBoardObj["allowPlacement"] = [];
-
+                    gameBoardObj["allowPlacement"] = []; // creates or empties array that will track placement potential
+                    // extends ship select length to match length of chosen ship
                     for (let i = lastPos - 1; i >=  firstDig; i--) {
+                        //captures all squares a given ship will cover
                         let shipPlace = document.getElementById(`playerOne-${firstLetter}${i}`);
-                        if (shipPlace == null) {
+                      
+                        if (shipPlace == null) {   // if 1 or more shipPlace is null, mark as unplaceable
                             gameBoardObj["allowPlacement"].push(false);
                         } 
-                        else {
-                            shipPlace.classList.add("ship");
+
+                        else { // allows ship to be placed on squares.
+                            shipPlace.classList.add("ship"); 
                             gameBoardObj["allowPlacement"].push(true);
                         }
+                        // adds click eventlistener. possibly replace shipPlace with divMod to add to all els.
                         divMod.addEventListener("click", (e) => {
                             if (gameBoardObj["allowPlacement"].includes(false) ) {
                                 // console.log(gameBoardObj["allowPlacement"]);
@@ -289,6 +293,7 @@ const buildDOM = {
             // });
             clearEvents();
             // add events to playerOne squares.
+            
             Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
                 let divMod = document.getElementById(`playerOne-${key}`);
                 divMod.addEventListener("mouseenter", (event) => {
