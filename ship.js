@@ -11,11 +11,24 @@ const gamePieces = {
 const xAx = [1,2,3,4,5,6,7,8];
 const yAx = ["A","B", "C", "D", "E", "F", "G"];
 
-const clearEvents = (el, parent) => {
-    // let divMod = document.getElementById(`playerOne-${key}`);
-    let clone = el.cloneNode(true);
-    parent.replaceChild(clone, el);
+// const clearEvents = (el, parent) => {
+    
+//     let clone = el.cloneNode(true);
+//     parent.replaceChild(clone, el);
+    
+// };
+
+const clearEvents = () => {
+    Object.keys(gameBoardObj["playerOne"]).forEach( (key) => {
+        let el = document.getElementById(`playerOne-${key}`);
+
+        let clone = el.cloneNode(true);
+        document.getElementById("grid-one").replaceChild(clone, el);
+
+    });    
 };
+
+
 
 const elFactory = (type, id, innerText, parStr, appendType) => {
     const element = document.createElement(type);
@@ -204,18 +217,22 @@ const buildDOM = {
     },
 
     addPlacement: () => {
-        // only grabs platerOne squares.
+        // only grabs playerOne squares.
         if (gameBoardObj["direction"] == "horizontal") {
+            gameBoardObj["allowPlacement"] = [];
+
+            // Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
+            //     let divMod = document.getElementById(`playerOne-${key}`);
+            //         //remove  event listeners within grid-one
+            //         clearEvents(divMod, document.getElementById("grid-one"));
+            //         // gameBoardObj["allowPlacement"] = [];
+            // });
+
+            clearEvents();
 
             Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
                 let divMod = document.getElementById(`playerOne-${key}`);
-                //remove  event listeners within grid-one
-                clearEvents(divMod, document.getElementById("grid-one"));
-                gameBoardObj["allowPlacement"] = [];
-            });
 
-            Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
-                let divMod = document.getElementById(`playerOne-${key}`);
                 divMod.addEventListener("mouseenter", (e) => {
                     let firstPos = e.target.id.slice(-2);//grabs A1, etc.
                     let lastPos = Number(firstPos.slice(-1)) + selectedShip[1];
@@ -261,12 +278,16 @@ const buildDOM = {
         }
 
         else if (gameBoardObj["direction"] == "vertical") {
-            Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
-                let divMod = document.getElementById(`playerOne-${key}`);
-                //remove  event listeners within grid-one
-                clearEvents(divMod, document.getElementById("grid-one"));
-                gameBoardObj["allowPlacement"] = [];
-            });
+            gameBoardObj["allowPlacement"] = [];
+            // Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
+                
+            //     let divMod = document.getElementById(`playerOne-${key}`);
+            //     //remove  event listeners within grid-one
+            //     clearEvents(divMod, document.getElementById("grid-one"));
+            //     // gameBoardObj["allowPlacement"] = [];
+                
+            // });
+            clearEvents();
             // add events to playerOne squares.
             Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
                 let divMod = document.getElementById(`playerOne-${key}`);
@@ -277,11 +298,11 @@ const buildDOM = {
                 firstLetter = yAx.indexOf(firstLetter);
 
                 for ( let i = firstLetter + selectedShip[1] - 1; i >= firstLetter ; i-- ) {
-                    let shipPlace = document.getElementById(`playerOne-${yAx[i]}${endNumb}`) 
+                    let shipPlace = document.getElementById(`playerOne-${yAx[i]}${endNumb}`); 
                     gameBoardObj["allowPlacement"] = [];
+
                     if (shipPlace == null) {
                         gameBoardObj["allowPlacement"].push(false);
-                        console.log(gameBoardObj["allowPlacement"]);
                     }
 
                     else if (shipPlace !== null ) { // 
@@ -290,9 +311,14 @@ const buildDOM = {
 
                         divMod.addEventListener("mouseleave", (event) => {
                             shipPlace.classList.remove("ship");
+
+
+                            divMod.addEventListener("click", (e) => {
+                                shipPlace.classList.add("placed-ship");
+                            });
                         });
                     }
-
+                
 
 
                 }
