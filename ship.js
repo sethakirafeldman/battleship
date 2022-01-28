@@ -98,7 +98,7 @@ const ships = {
         players[player].ships.push(shipObject);
             shipObject.boardLocation.forEach(value => {
                 let shipSquare = document.getElementById(`${shipObject.player}-${value}`);
-                shipSquare.classList.add('ship');
+                // shipSquare.classList.add('ship');
 
                 //updates gameBoardObj 
                 players[player].board[value].controlled = shipObject.player;
@@ -222,51 +222,59 @@ const buildDOM = {
             // goes through each playerOne square
             Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
                 let divMod = document.getElementById(`playerOne-${key}`);
-                let getPositions = (event, str) => {
+                const getPositions = (event, str) => {
                     let firstPos = event.target.id.slice(-2); 
                     let lastPos = Number(firstPos.slice(-1)) + selectedShip[1]; // last square of to be placed ship
                     let firstLetter = firstPos.charAt(0); // first character, eg. A, B, etc.
                     let firstDig = Number(firstPos.slice(-1)); // first digit 
                  
                     for (let i= lastPos - 1; i >= firstDig; i--) {
+
+                        if (document.getElementById(`playerOne-${firstLetter}${i}`) !== null) {
                             document.getElementById(`playerOne-${firstLetter}${i}`).classList.add(str);
+                        }
+                        else {
+                            gameBoardObj["allowPlacement"] = false;
+                        }
                     }   
-                }; //grabs A1, etc.
+                };
            
                 let placedArr = [];
                 //adds mouseenter event to each playerOne square. 
                 divMod.addEventListener("mouseenter", (event) => {
-                    getPositions(event, "ship");
-                    gameBoardObj["allowPlacement"] = []; // creates or empties array that will track placement potential
                     // extends ship select length to match length of chosen ship
+                    getPositions(event, "ship");
                
                 });
 
 
-                divMod.addEventListener("click", (event) => {
-                    if (gameBoardObj["allowPlacement"].includes(false) ) {
-                        // console.log(gameBoardObj["allowPlacement"]);
+                divMod.addEventListener("click", (event) => {                    
+                    if (gameBoardObj["allowPlacement"] === false) {
+                        // prevents placement when not allowed.
                     }
                     else {
                         getPositions(event, "placed-ship");
-                        placedArr.push(`${firstLetter}${i}`);
-
-                        if (placedArr.length == selectedShip[1] ) {
-                            ships.placeShip(selectedShip, placedArr, "playerOne");
-                            console.log(gameBoardObj["playerOne"]);
-                        }
+                        Object.keys(gameBoardObj["playerOne"]).forEach( (key) => {
+                            if ( document.getElementById(`playerOne-${key}`).classList.contains("placed-ship") ) {
+                                placedArr.push(key);
+                                ships.placeShip(selectedShip, placedArr, "playerOne");
+                            }
+                        });
                     }
                 });   
  
                 divMod.addEventListener("mouseleave", (event) => {
-            
+                    gameBoardObj["allowPlacement"] = ""; 
                     let firstPos = event.target.id.slice(-2); 
                     let lastPos = Number(firstPos.slice(-1)) + selectedShip[1]; // last square of to be placed ship
                     let firstLetter = firstPos.charAt(0); // first character, eg. A, B, etc.
                     let firstDig = Number(firstPos.slice(-1)); // first digit 
                  
                     for (let i= lastPos - 1; i >= firstDig; i--) {
+                        if (document.getElementById(`playerOne-${firstLetter}${i}`) !== null) {
                             document.getElementById(`playerOne-${firstLetter}${i}`).classList.remove("ship");
+                        }
+         
                     }   
                 
                 });
@@ -274,7 +282,7 @@ const buildDOM = {
         }
 
         else if (gameBoardObj["direction"] == "vertical") {
-            gameBoardObj["allowPlacement"] = [];
+            gameBoardObj["allowPlacement"] = "";
             // Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
                 
             //     let divMod = document.getElementById(`playerOne-${key}`);
