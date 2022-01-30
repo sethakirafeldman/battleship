@@ -11,13 +11,6 @@ const gamePieces = {
 const xAx = [1,2,3,4,5,6,7,8];
 const yAx = ["A","B", "C", "D", "E", "F", "G"];
 
-// const clearEvents = (el, parent) => {
-    
-//     let clone = el.cloneNode(true);
-//     parent.replaceChild(clone, el);
-    
-// };
-
 const clearEvents = () => {
     Object.keys(gameBoardObj["playerOne"]).forEach( (key) => {
         let el = document.getElementById(`playerOne-${key}`);
@@ -166,6 +159,7 @@ const buildDOM = {
         });
         sel.addEventListener('change', ()=> {
             selectedShip = gamePieces[sel.value];
+            console.log("change");
         });
         // type, id, innerText, parStr, appendType
         elFactory("div", "direction-menu", "", "grid-container", "prepend");
@@ -231,8 +225,6 @@ const buildDOM = {
                     for (let i= lastPos - 1; i >= firstDig; i--) {
                         let targSquare = document.getElementById(`playerOne-${firstLetter}${i}`);
 
-
-
                         if (targSquare !== null && str == "enter") {
                             targSquare.classList.add("ship");
                         }
@@ -242,13 +234,24 @@ const buildDOM = {
                         }
                         else if (targSquare !== null && str == "click") {
                             targSquare.classList.add("placed-ship");
+                            let select = document.getElementById("ship-selector");
+                            // remove placed ship from drop-down.
+                            for (let j =0; j < select.length; j++) {
+
+                                if (select[j].innerText === selectedShip[0]) {
+                                    select[j].remove();   
+                                    selectedShip ="";
+                                };
+                            }; 
                         }
+
 
                         else if (targSquare == null ) {
                             return gameBoardObj["allowPlacement"] = false;
                         }
-
                     };
+                    // sets selectedShip to the currently selected
+                    return selectedShip = gamePieces[document.getElementById("ship-selector")[0].innerText];
                 };   
               
                 let placedArr = [];
@@ -288,12 +291,12 @@ const buildDOM = {
             // add events to playerOne squares.
             Object.keys(gameBoardObj["playerOne"]).forEach( (key)=> {
                 let divMod = document.getElementById(`playerOne-${key}`);
+                let placedArr = []; // store A1, B1, etc.
 
                 const getVert = (str) => {
 
                     let firstLetter = key.charAt(0);
                     let endNumb= key.charAt(1); //stays static
-                    let placedArr = []; // store A1, B1, etc.
                     firstLetter = yAx.indexOf(firstLetter);
                     
                     for ( let i = firstLetter + selectedShip[1] - 1; i >= firstLetter ; i-- ) {
@@ -304,20 +307,26 @@ const buildDOM = {
                         if (shipPlace == null) {
                             return gameBoardObj["allowPlacement"] = false;
                         }
-    
                         else if (shipPlace !== null && str == "enter" ) { // 
                             shipPlace.classList.add("ship");   
-                            // gameBoardObj["allowPlacement"]= true;    
                         }
-
                         else if (shipPlace !== null && str == "leave") {
                             shipPlace.classList.remove("ship");   
                         }
-
                         else if (shipPlace !== null && str == "click") {
                             shipPlace.classList.add("placed-ship");
+                            let select = document.getElementById("ship-selector");
+                            for (let j =0; j< select.length; j++) {
+                                if (select[j].innerText === selectedShip[0]) {
+                                   select[j].remove();
+                                   selectedShip ="";
+                                }
+                            };    
                         }
                     };
+
+                    return selectedShip = gamePieces[document.getElementById("ship-selector")[0].innerText];
+
                 };
                     divMod.addEventListener("mouseenter", (event) => {  
                         getVert("enter");
@@ -327,9 +336,14 @@ const buildDOM = {
                     });
                     divMod.addEventListener("click", (event) => {
                         getVert("click");
+                        Object.keys(gameBoardObj["playerOne"]).forEach( (key) => {
+                            if ( document.getElementById(`playerOne-${key}`).classList.contains("placed-ship") ) {
+                                placedArr.push(key);
+                                ships.placeShip(selectedShip, placedArr, "playerOne");
+                            }
+                        });
                     });
-                });
-               
+                });            
         }
     }
 };
