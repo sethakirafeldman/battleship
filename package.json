@@ -1,8 +1,31 @@
 {
-  "devDependencies": {
-    "jest": "^27.4.5"
+  "name": "battleship",
+  "version": "1.0.0",
+  "description": "https://www.theodinproject.com/paths/full-stack-javascript/courses/javascript/lessons/battleship",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --watch",
+    "build": "webpack"
   },
-    "scripts": {
-      "test": "jest --verbose"
-    }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/namdlefhtes/battleship.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/namdlefhtes/battleship/issues"
+  },
+  "homepage": "https://github.com/namdlefhtes/battleship#readme",
+  "devDependencies": {
+    "css-loader": "^6.5.1",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.67.0",
+    "webpack-cli": "^4.9.2"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
 }
