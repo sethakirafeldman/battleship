@@ -76,5 +76,3 @@ export const players = {
         ships: []
     }
 };
-
-export let selectedShip = gamePieces["carrier"];

@@ -6,7 +6,7 @@ import { gameBoardObj } from "./globalVar.js";
 // import { elFactory } from "./globalVar.js";
 // import { gameBoard } from "./globalVar.js";
 import { players } from "./globalVar.js";
-// import { selectedShip } from "./globalVar";
+// import { selectedShip } from "./globalVar.js";
 
 
 export const ships = {

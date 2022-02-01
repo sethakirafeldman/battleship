@@ -4,11 +4,12 @@ import { xAx } from "./globalVar.js";
 import { yAx } from "./globalVar.js";
 import { clearEvents } from "./globalVar.js";
 import { elFactory } from "./globalVar.js";
-// import { gameBoard } from "./globalVar.js";
-// import { players } from "./globalVar.js";
-import { selectedShip } from "./globalVar.js";
+import { gameBoard } from "./globalVar.js";
+import { players } from "./globalVar.js";
 import { ships } from "./shipModule.js";
 
+let selectedShip = gamePieces["carrier"];
+// console.log(typeof(selectedShip));
 export const buildDOM = {
 
     buildDrop: () => {
@@ -193,8 +194,8 @@ export const buildDOM = {
                             };    
                         }
                     };
-
                     return selectedShip = gamePieces[document.getElementById("ship-selector")[0].innerText];
+
 
                 };
                     divMod.addEventListener("mouseenter", (event) => {  
