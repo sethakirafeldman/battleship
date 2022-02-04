@@ -9,6 +9,7 @@
 // import { selectedShip } from "./globalVar";
 
 import { buildDOM } from "./buildModule.js";
+import { AI } from "./computer.js";
 
 // import { ships } from "./shipModule.js";
 
@@ -17,7 +18,8 @@ import { buildDOM } from "./buildModule.js";
 buildDOM.buildGrid("playerOne");
 buildDOM.buildGrid("playerTwo");
 buildDOM.buildDrop();
+AI();
+
 
 import "./index.css";
 
-// console.log(players)

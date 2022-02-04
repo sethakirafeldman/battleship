@@ -8,8 +8,10 @@ import { gameBoard } from "./globalVar.js";
 import { players } from "./globalVar.js";
 import { ships } from "./shipModule.js";
 
-let selectedShip = gamePieces["carrier"];
-// console.log(typeof(selectedShip));
+// let sel = document.getElementById("ship-selector");
+
+let selectedShip ="";
+
 export const buildDOM = {
 
     buildDrop: () => {
@@ -27,7 +29,7 @@ export const buildDOM = {
         });
         sel.addEventListener('change', ()=> {
             selectedShip = gamePieces[sel.value];
-            console.log("change");
+            console.log(selectedShip);
         });
         // type, id, innerText, parStr, appendType
         elFactory("div", "direction-menu", "", "grid-container", "prepend");
@@ -75,8 +77,10 @@ export const buildDOM = {
             getLetter.before(lettHead); 
         });
     },
-
+    
     addPlacement: () => {
+        // let selectedShip = gamePieces["carrier"];
+        selectedShip = document.getElementById("ship-selector")[0];
         // only grabs playerOne squares.
         if (gameBoardObj["direction"] == "horizontal") {
             gameBoardObj["allowPlacement"] = [];
@@ -94,7 +98,7 @@ export const buildDOM = {
                         let targSquare = document.getElementById(`playerOne-${firstLetter}${i}`);
 
                         if (targSquare !== null && str == "enter") {
-                            targSquare.classList.add("ship");
+                            targSquare.classList.add("ship");           
                         }
 
                         else if (targSquare !== null && str == "leave") {
@@ -115,8 +119,8 @@ export const buildDOM = {
                             }; 
                         }
 
-
-                        else if (targSquare == null ) {
+                        else if (targSquare == null || targSquare.classList.contains("placed-ship") === true ) {
+                            console.log("cannot place here");
                             return gameBoardObj["allowPlacement"] = false;
                         }
                     };
