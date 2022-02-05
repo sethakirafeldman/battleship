@@ -1,5 +1,3 @@
-import { random } from "lodash";
-import Yallist from "yallist";
 import { gamePieces } from "./globalVar.js";
 import { gameBoardObj } from "./globalVar.js";
 import { xAx } from "./globalVar.js";
@@ -11,7 +9,7 @@ import { players } from "./globalVar.js";
 import { ships } from "./shipModule.js";
 
 
-console.log(gamePieces);
+// console.log(gamePieces);
 let allowedHor= {
 
 }
@@ -46,7 +44,12 @@ const horOpt = ()=> {
 horOpt();
 
 
-export const AI = () => {
+const vertOpt = {
+
+
+};
+
+export const horiz = () => {
 
     // random horizontal placement.
     Object.values(gamePieces).forEach( (e)=> {
@@ -64,13 +67,14 @@ export const AI = () => {
             // console.log(randomLett+j);
             arr.push(randomLett+j);
         }
-        console.log(arr);
+        // console.log(arr);
 
         ships.placeShip(piece, arr, "playerTwo");
 
     });
 
     console.log(gameBoardObj["playerTwo"]);
+    
 
 };
 

@@ -1,12 +1,6 @@
-// import { gamePieces } from "./globalVar.js";
+import { values } from "lodash";
 import { gameBoardObj } from "./globalVar.js";
-// import { xAx } from "./globalVar.js";
-// import { yAx } from "./globalVar.js";
-// import { clearEvents } from "./globalVar.js";
-// import { elFactory } from "./globalVar.js";
-// import { gameBoard } from "./globalVar.js";
 import { players } from "./globalVar.js";
-// import { selectedShip } from "./globalVar.js";
 
 
 export const ships = {
@@ -23,13 +17,14 @@ export const ships = {
 
         players[player].ships.push(shipObject);
             shipObject.boardLocation.forEach(value => {
-                let shipSquare = document.getElementById(`${shipObject.player}-${value}`);
-                // shipSquare.classList.add('ship');
-
                 //updates gameBoardObj 
                 players[player].board[value].controlled = shipObject.player;
                 players[player].board[value].type = shipObject.gamePiece[0];
                 players[player].board[value].length = shipObject.gamePiece[1];
+                // adds ship to board
+                let sq = document.getElementById(`${player}-${value}`);
+                sq.classList.add("placed-ship");
+
               });
             return shipObject;
     },

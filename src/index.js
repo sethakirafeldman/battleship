@@ -9,7 +9,7 @@
 // import { selectedShip } from "./globalVar";
 
 import { buildDOM } from "./buildModule.js";
-import { AI } from "./computer.js";
+import { horiz } from "./computer.js";
 
 // import { ships } from "./shipModule.js";
 
@@ -18,7 +18,7 @@ import { AI } from "./computer.js";
 buildDOM.buildGrid("playerOne");
 buildDOM.buildGrid("playerTwo");
 buildDOM.buildDrop();
-AI();
+horiz();
 
 
 import "./index.css";
